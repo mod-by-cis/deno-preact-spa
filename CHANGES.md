@@ -24,3 +24,5 @@ error: The module's source code could not be parsed: Expected ',', got 'string l
   ');
   ~~~
 Watcher Process failed. Restarting on file change...
+
+## w wersji 0.1.2 w dalszym ciągu mam problem z znakiem ucieczki `/n` podejmuje kolejną próbę 
