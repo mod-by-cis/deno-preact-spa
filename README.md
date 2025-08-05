@@ -1,4 +1,4 @@
-# @cis/deno-preact-spa
+# @cis/deno-preact-spa ([GIThub](https://github.com/mod-by-cis/deno-preact-spa))
 
 ## [PL] 
 
