@@ -1,4 +1,9 @@
-# @cis/deno-preact-spa ([GIThub](https://github.com/mod-by-cis/deno-preact-spa))
+# @cis/deno-preact-spa 
+
+- ([GIThub](https://github.com/mod-by-cis/deno-preact-spa))
+- ([JSR](https://jsr.io/@cis/deno-preact-spa@latest))
+
+---
 
 ## [PL] 
 
