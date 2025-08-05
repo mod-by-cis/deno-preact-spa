@@ -97,7 +97,7 @@ function logBox(
   const applyTxtStyles = createComposer('txt');
   const applyBoxStyles = createComposer('box');
 
-  const lines = text.split('\\n');
+  const lines = text.split('\\\n');
   const maxWidth = Math.max(...lines.map((line) => line.length));
 
   const horizontalPaddingWidth = padding + padding==0?1:padding==1?3:2; 
