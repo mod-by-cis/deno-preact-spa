@@ -7,10 +7,20 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
-      id-token: write
+      id-token: write # Potrzebne do uwierzytelnienia w JSR
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Deno
+        # Użycie najnowszej, zalecanej wersji akcji
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.4.3
+
       - name: Publish package
-        run: npx jsr publish
+        run: deno publish

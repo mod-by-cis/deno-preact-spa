@@ -1,5 +1,6 @@
 export const content = `import { serveDir } from "$deno-http/file-server";
 import { join, relative } from "$deno-path";
+import { exists } from "$deno-fs";
 import logBox from "$$lib/log-box.ts";
 import { TimeSnap } from "$$lib/time-snap.ts";
 
@@ -11,7 +12,6 @@ const WEBSOCKET_PATH = "/__live_reload_ws";
 const COOLDOWN_MS = 90000;
 
 // --- LOGIKA SERWERA ---
-
 const sockets = new Set<WebSocket>();
 let lastBuildTimestamp = 0;
 let isBuilding = false;
@@ -119,14 +119,10 @@ async function handleRequest(req: Request, fsRoot: string): Promise<Response> {
 
   // Jeśli plik został znaleziony (lub użyliśmy fallbacku), przetwarzamy go dalej
   if (response.ok) {
-    // Tworzymy nowe, modyfikowalne nagłówki
     const headers = new Headers(response.headers);
-
-    // KLUCZOWA POPRAWKA: Dodajemy nagłówki wyłączające cache do KAŻDEJ odpowiedzi
     headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
     headers.set("Pragma", "no-cache");
     headers.set("Expires", "0");
-
     let body = response.body;
 
     // Jeśli to plik HTML, wstrzykujemy skrypt live-reload
@@ -163,7 +159,26 @@ async function startServer() {
   const pathRoot = Deno.cwd();
   const pathServe = join(pathRoot, SERVE_ROOT);
   const pathWatch = join(pathRoot, WATCH_ROOT);
+  const pathGen = join(pathServe, "gen");  
 
+  
+
+  // KROK 1: Sprawdź, czy katalog 'gen' istnieje.
+  if (!await exists(pathGen)) {
+    logBox("INFO: Katalog 'gen' nie istnieje. Uruchamianie pierwszego budowania...", { color: 0xFFFF00, bgColor: 0x3d3d2d });
+    
+    const command = new Deno.Command("deno", { args: ["task", "build"] });
+    const { code, stderr } = await command.output();
+    
+    if (code !== 0) {
+      console.error("❌ Krytyczny błąd podczas pierwszego budowania. Serwer nie może wystartować.");
+      console.error(new TextDecoder().decode(stderr));
+      Deno.exit(1);
+    }
+    console.log("✅ Pierwsze budowanie zakończone pomyślnie.");
+  }
+
+  // KROK 2: Kontynuuj normalne uruchamianie serwera
   lastBuildTimestamp = await initializeLastBuildTimestamp(pathServe);
 
   (async () => {
