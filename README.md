@@ -1,4 +1,4 @@
-# @cis/deno-preact-spa@0.1.6
+# @cis/deno-preact-spa@0.1.7
 
 - ([GIThub](https://github.com/mod-by-cis/deno-preact-spa))
 - ([JSR](https://jsr.io/@cis/deno-preact-spa@latest))
@@ -150,7 +150,7 @@ This project is licensed under the **Mozilla Public License Version 2.0**.
 ## w wersji 0.1.0 komenda `deno task start` 
 nie pozwalała na przeprowadzenia 1 budowania, gdy nie było poprzedniego.
 
-## w wersji 0.1.0 wkradł się błądy z znakiem ucieczki
+## w wersji 0.1.0 wkradł się błąd z znakiem ucieczki
 
 ```shell
 deno task start
@@ -168,4 +168,6 @@ Watcher Process failed. Restarting on file change...
 - w wersji 0.1.4 w dalszym ciągu mam problem z znakiem ucieczki `/n` podejmuje kolejną próbę 
 - w wersji 0.1.5 odkryłem że poprawa była już w wersji 0.1.3 ale problem stanowiła błedna komenda inicjująca `deno run -A jsr:@cis/deno-preact-spa init nazwa-twojego-projektu` zamiast `deno run -A --reload jsr:@cis/deno-preact-spa init nazwa-twojego-projektu`
   
+## w wersja 0.1.6 i 0.1.7 nareszcie działa poprawnie
+
 ---

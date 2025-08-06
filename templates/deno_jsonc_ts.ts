@@ -2,6 +2,8 @@ export const content = `{
   "tasks": {
     "start": "deno run --allow-net --allow-read --allow-write --allow-run --watch ./tasks/task-start.ts",
     "build": "deno run --allow-read --allow-write --allow-net --allow-env --allow-run ./tasks/task-build.ts"
+    "edit-in-vs-code": "code .",
+    "edit-in-vs-codium": "codium .",
   },
   "compilerOptions": {
     "jsx": "react-jsx",
