@@ -1,5 +1,4 @@
-// Używamy String.raw, aby uniknąć problemów ze znakami ucieczki
-export const content = String.raw`import {
+export const content = `import {
   bgRgb24,
   rgb24,
   bold,
@@ -60,7 +59,6 @@ function logBox(
   const boxColor = rawBoxColor ?? color;
   const padding = Math.max(0, Math.floor(styles.padding ?? 0));
 
-  // Funkcja, która tworzy "kompozytora" stylów dla danego celu ('txt' lub 'box')
   const createComposer = (target: 'txt' | 'box'): StyleFunction => {
     const activeStyleFns: StyleFunction[] = [];
     for (const key in styles) {
@@ -69,22 +67,16 @@ function logBox(
       const styleValue = styles[styleName as keyof Omit<logBoxStyleOptions, 'padding'>];
       if (!STYLES_MAP[styleName]) continue;
 
-      // Sprawdź, czy styl jest obiektem targetu (np. { txt: true })
       if (typeof styleValue === 'object') {
-        // Przypadek 1: Styl jest obiektem, np. { txt: true }
         if (styleValue?.[target]) {
           activeStyleFns.push(STYLES_MAP[styleName]);
         }
       } else if (typeof styleValue === 'boolean' && styleValue) {
-        // Przypadek 2: Styl jest booleanem
         const isComplexStyle = ['bold', 'dim', 'inverse', 'hidden'].includes(styleName);
 
         if (isComplexStyle) {
-          // Jeśli to styl złożony (np. bold: true), traktujemy go jako skrót "zastosuj do obu"
-          // Ta gałąź wykona się zarówno dla targetu 'txt', jak i 'box'
           activeStyleFns.push(STYLES_MAP[styleName]);
         } else {
-          // Jeśli to styl prosty (np. italic: true), dotyczy tylko tekstu
           if (target === 'txt') {
             activeStyleFns.push(STYLES_MAP[styleName]);
           }
@@ -97,7 +89,7 @@ function logBox(
   const applyTxtStyles = createComposer('txt');
   const applyBoxStyles = createComposer('box');
 
-  const lines = text.split('\n');
+  const lines = text.split('__NEWLINE_PLACEHOLDER__');
   const maxWidth = Math.max(...lines.map((line) => line.length));
 
   const horizontalPaddingWidth = padding + padding==0?1:padding==1?3:2; 

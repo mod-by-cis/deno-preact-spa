@@ -41,7 +41,7 @@ const filesToCreate = new Map<string, string>([
     ["deno.jsonc", denoJsoncContent],
     ["tasks/task-build.ts", taskBuildContent],
     ["tasks/task-start.ts", taskStartContent],
-    ["lib/log-box.ts", logBoxContent],
+    ["lib/log-box.ts", logBoxContent.replace(/__NEWLINE_PLACEHOLDER__/g, '\\n')],
     ["lib/polyfills.ts", polyfillsContent],
     ["lib/time-snap.ts", timeSnapContent],
     ["app/out/index.html", indexHtmlContent],
