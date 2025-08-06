@@ -27,3 +27,5 @@ Watcher Process failed. Restarting on file change...
 
 ## w wersji 0.1.2 w dalszym ciągu mam problem z znakiem ucieczki `/n` podejmuje kolejną próbę 
 ## w wersji 0.1.3 w dalszym ciągu mam problem z znakiem ucieczki `/n` podejmuje kolejną próbę 
+## w wersji 0.1.4 w dalszym ciągu mam problem z znakiem ucieczki `/n` podejmuje kolejną próbę 
+rozpoczynam poszerzoną diognostyke

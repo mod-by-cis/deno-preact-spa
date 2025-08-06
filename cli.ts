@@ -1,6 +1,6 @@
-import { ensureDir } from "jsr:@std/fs@^1.0.19/ensure-dir";
+import { ensureDir } from "jsr:@std/fs@^1.0.0/ensure-dir";
 import { join } from "jsr:@std/path@^1.1.1";
-import { parseArgs } from "jsr:@std/cli@^1.0.21/parse-args";
+import { parseArgs } from "jsr:@std/cli@^1.0.0/parse-args";
 
 // Importuj wszystkie szablony
 import { content as denoJsoncContent } from "./templates/deno_jsonc_ts.ts";
@@ -20,7 +20,7 @@ const command = args._[0];
 
 if (command !== "init") {
   console.error("❌ Błąd: Nieznana komenda. Dostępna komenda to 'init'.");
-  console.log("👉 Użycie: deno run -A jsr:@twoja-nazwa/twoj-super-starter init <nazwa-projektu>");
+  console.log("👉 Użycie: deno run -A jsr:@cis/deno-preact-spa init <nazwa-projektu>");
   Deno.exit(1);
 }
 
@@ -28,7 +28,7 @@ const projectName = args._[1] as string;
 
 if (!projectName) {
   console.error("❌ Błąd: Musisz podać nazwę dla nowego projektu.");
-  console.log("👉 Użycie: deno run -A jsr:@twoja-nazwa/twoj-super-starter init <nazwa-projektu>");
+  console.log("👉 Użycie: deno run -A jsr:@cis/deno-preact-spa init <nazwa-projektu>");
   Deno.exit(1);
 }
 
@@ -36,12 +36,34 @@ const projectDir = join(Deno.cwd(), projectName);
 
 console.log(`🚀 Inicjalizacja nowego projektu w: ${projectDir}`);
 
+// ======================= KROK DIAGNOSTYCZNY =======================
+console.log("\n--- DIAGNOSTYKA: Krok 1: Surowa zawartość szablonu log-box ---");
+console.log(logBoxContent);
+
+const modifiedLogBoxContent = logBoxContent.replace(/__NEWLINE_PLACEHOLDER__/g, '\\n');
+
+console.log("\n--- DIAGNOSTYKA: Krok 2: Zawartość log-box PO ZAMIANIE ---");
+console.log(modifiedLogBoxContent);
+
+// Znajdźmy problematyczną linię i sprawdźmy jej kody znaków
+const problematicLine = modifiedLogBoxContent.split('\n').find(line => line.includes("text.split"));
+if (problematicLine) {
+    console.log("\n--- DIAGNOSTYKA: Krok 3: Analiza kodów znaków w problematycznej linii ---");
+    console.log("Linia:", problematicLine);
+    const charCodes = Array.from(problematicLine).map(char => `${char} (${char.charCodeAt(0)})`);
+    console.log("Kody Znaków:", charCodes.join(' | '));
+    console.log("\nINFO: Oczekujemy, że sekwencja '\\n' będzie miała kody: \\ (92) i n (110).");
+    console.log("INFO: Jeśli zamiast tego widzimy kod 10, oznacza to, że jest tam znak nowej linii.");
+}
+console.log("====================================================================\n");
+// ====================================================================
+
 // Mapa ścieżek docelowych i ich zawartości
 const filesToCreate = new Map<string, string>([
     ["deno.jsonc", denoJsoncContent],
     ["tasks/task-build.ts", taskBuildContent],
     ["tasks/task-start.ts", taskStartContent],
-    ["lib/log-box.ts", logBoxContent.replace(/__NEWLINE_PLACEHOLDER__/g, '\\n')],
+    ["lib/log-box.ts", modifiedLogBoxContent], // Używamy zmodyfikowanej wersji
     ["lib/polyfills.ts", polyfillsContent],
     ["lib/time-snap.ts", timeSnapContent],
     ["app/out/index.html", indexHtmlContent],
@@ -52,7 +74,6 @@ const filesToCreate = new Map<string, string>([
 ]);
 
 try {
-    // Tworzenie głównego katalogu projektu
     await ensureDir(projectDir);
 
     for (const [relativePath, content] of filesToCreate) {
@@ -72,7 +93,6 @@ try {
     console.log("  4. Zacznij edytować pliki w katalogu app/dev - strona będzie się odświeżać automatycznie!");
 
 } catch (err) {
-    // POPRAWKA: Sprawdzamy, czy 'err' jest instancją klasy Error
     if (err instanceof Error) {
         console.error(`\n🔥 Wystąpił krytyczny błąd podczas tworzenia projektu:`, err.message);
     } else {
