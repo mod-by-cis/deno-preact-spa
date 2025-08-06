@@ -1,6 +1,6 @@
-import { ensureDir } from "jsr:@std/fs@^1.0.0/ensure-dir";
+import { ensureDir } from "jsr:@std/fs@^1.0.19/ensure-dir";
 import { join } from "jsr:@std/path@^1.1.1";
-import { parseArgs } from "jsr:@std/cli@^1.0.0/parse-args";
+import { parseArgs } from "jsr:@std/cli@^1.0.21/parse-args";
 
 // Importuj wszystkie szablony
 import { content as vscodeJsonContent } from "./templates/.vscode/settings_json_ts.ts";
